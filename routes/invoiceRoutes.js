@@ -1,21 +1,19 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   createInvoice,
   getInvoices,
   getInvoiceById,
   updateInvoice,
   deleteInvoice,
-} = require("../controllers/invoiceController.js");
-const { protect } = require("../middlewares/authMiddleware.js");
+} from "../controllers/invoiceController.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.route("/").post(protect, createInvoice).get(protect, getInvoices);
+router.post("/", protect, createInvoice);
+router.get("/", protect, getInvoices);
+router.get("/:id", protect, getInvoiceById);
+router.put("/:id", protect, updateInvoice);
+router.delete("/:id", protect, deleteInvoice);
 
-router
-  .route("/:id")
-  .get(protect, getInvoiceById)
-  .put(protect, updateInvoice)
-  .delete(protect, deleteInvoice)
-
-module.exports = router;
+export default router;

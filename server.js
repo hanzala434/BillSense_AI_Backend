@@ -1,12 +1,17 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const connectDB = require("./config/db");
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import invoiceRoutes from "./routes/invoiceRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
-const authRoutes = require('./routes/authRoutes')
-const invoiceRoutes = require('./routes/invoiceRoutes')
-const aiRoutes = require('./routes/aiRoutes')
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -25,15 +30,20 @@ connectDB();
 // Middleware
 app.use(express.json());
 
-// Routes Here
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/ai", aiRoutes);
 
+// Health check route
+app.get("/", (req, res) => {
+  res.json({ message: "BillSense AI Backend API is running" });
+});
+
 // Start Server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
 
-module.exports = app;
+export default app;

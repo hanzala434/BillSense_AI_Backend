@@ -1,9 +1,9 @@
-const { GoogleGenAI } = require("@google/genai");
-const Invoice = require("../models/Invoice");
+import { GoogleGenAI } from "@google/genai";
+import Invoice from "../models/Invoice.js";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-const parseInvoiceFromText = async (req, res) => {
+export const parseInvoiceFromText = async (req, res) => {
   const { text } = req.body;
 
   if (!text) {
@@ -42,7 +42,7 @@ const parseInvoiceFromText = async (req, res) => {
       contents: prompt,
     });
     
-    const responseText = response.text;
+    let responseText = response.text;
 
     if (typeof responseText !== 'string') {
         
@@ -64,7 +64,7 @@ const parseInvoiceFromText = async (req, res) => {
   }
 };
 
-const generateReminderEmail = async (req, res) => {
+export const generateReminderEmail = async (req, res) => {
 
     const { invoiceId } = req.body;
 
@@ -102,7 +102,7 @@ const generateReminderEmail = async (req, res) => {
   }
 };
 
-const getDashboardSummary = async (req, res) => {
+export const getDashboardSummary = async (req, res) => {
 
   try {
     const invoices = await Invoice.find({ user: req.user.id });
@@ -156,5 +156,3 @@ const getDashboardSummary = async (req, res) => {
     res.status(500).json({ message: "Failed to parse invoice data from text.", details: error.message });
   }
 };
-
-module.exports = { parseInvoiceFromText, generateReminderEmail, getDashboardSummary };

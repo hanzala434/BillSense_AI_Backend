@@ -1,9 +1,9 @@
-const Invoice = require("../models/Invoice");
+import Invoice from "../models/Invoice.js";
 
 // @desc    Create new invoice
 // @route   POST /api/invoices
 // @access  Private
-exports.createInvoice = async (req, res) => {
+export const createInvoice = async (req, res) => {
   try {
     const user = req.user;
     const {
@@ -55,7 +55,7 @@ exports.createInvoice = async (req, res) => {
 // @desc    Get all invoices of logged-in user
 // @route   GET /api/invoices
 // @access  Private
-exports.getInvoices = async (req, res) => {
+export const getInvoices = async (req, res) => {
   try {
     const invoices = await Invoice.find({user: req.user.id}).populate("user", "name email");
     res.json(invoices);
@@ -69,7 +69,7 @@ exports.getInvoices = async (req, res) => {
 // @desc    Get single invoice by ID
 // @route   GET /api/invoices/:id
 // @access  Private
-exports.getInvoiceById = async (req, res) => {
+export const getInvoiceById = async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id).populate("user", "name email");
     if (!invoice) return res.status(404).json({ message: "Invoice not found" });
@@ -90,7 +90,7 @@ exports.getInvoiceById = async (req, res) => {
 // @desc    Update invoice
 // @route   PUT /api/invoices/:id
 // @access  Private
-exports.updateInvoice = async (req, res) => {
+export const updateInvoice = async (req, res) => {
   try {
     const {
       invoiceNumber,
@@ -148,7 +148,7 @@ exports.updateInvoice = async (req, res) => {
 // @desc    Delete invoice
 // @route   DELETE /api/invoices/:id
 // @access  Private
-exports.deleteInvoice = async (req, res) => {
+export const deleteInvoice = async (req, res) => {
   try {
     const invoice = await Invoice.findByIdAndDelete(req.params.id);
     if (!invoice) return res.status(404).json({ message: "Invoice not found" });

@@ -1,11 +1,11 @@
-const express = require("express");
-const { parseInvoiceFromText, generateReminderEmail, getDashboardSummary } = require("../controllers/aiController.js");
-const { protect } = require("../middlewares/authMiddleware.js");
+import express from "express";
+import { parseInvoiceFromText, generateReminderEmail, getDashboardSummary } from "../controllers/aiController.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/parse-text", protect, parseInvoiceFromText);
+router.post("/generate-invoice", protect, parseInvoiceFromText);
 router.post("/generate-reminder", protect, generateReminderEmail);
 router.get("/dashboard-summary", protect, getDashboardSummary);
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 // Helper: Generate JWT
 const generateToken = (id) => {
@@ -11,7 +11,7 @@ const generateToken = (id) => {
 // @desc    Register new user
 // @route   POST /api/auth/register
 // @access  Public
-exports.registerUser = async (req, res) => {
+export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -46,7 +46,7 @@ exports.registerUser = async (req, res) => {
 // @desc    Login user
 // @route   POST /api/auth/login
 // @access  Public
-exports.loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -58,7 +58,6 @@ exports.loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
         token: generateToken(user._id),
-
         businessName: user.businessName || "",
         address: user.address || "",
         phone: user.phone || "",
@@ -74,14 +73,13 @@ exports.loginUser = async (req, res) => {
 // @desc    Get current logged-in user
 // @route   GET /api/auth/me
 // @access  Private
-exports.getMe = async (req, res) => {
+export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
-
       businessName: user.businessName || "",
       address: user.address || "",
       phone: user.phone || "",
@@ -94,7 +92,7 @@ exports.getMe = async (req, res) => {
 // @desc    Update user profile
 // @route   PUT /api/auth/me
 // @access  Private
-exports.updateUserProfile = async (req, res) => {
+export const updateUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
 
